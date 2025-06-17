@@ -1,88 +1,83 @@
 const subjectMap = {
   "Advance Web Technology": {
-    day: "30-April-2025",
-    time: "10:00pm - 11:30pm",
+    day: "30-June-2025",
+    time: "10:00am - 01:00pm",
   },
   "Computer Networks": {
-    day: "02-May-2025",
-    time: "10:00pm - 11:30pm",
+    day: "02-July-2025",
+    time: "10:00am - 01:00pm",
   },
   "Machine Learning": {
-    day: "06-May-2025",
-    time: "10:00pm - 11:30pm",
+    day: "04-July-2025",
+    time: "10:00am - 01:00pm",
   },
   "Understanding India": {
-    day: "09-May-2025",
-    time: "03:00pm - 04:30pm",
+    day: "07-July-2025",
+    time: "10:00am - 01:00pm",
   },
   Cryptography: {
-    day: "13-May-2025",
-    time: "12:30pm - 02:00pm",
+    day: "09-July-2025",
+    time: "10:00am - 01:00pm",
   },
 };
-const subjects = [
-  "Advance Web Technology",
-  "Computer Networks",
-  "Machine Learning",
-  "Understanding India",
-  "Cryptography",
-];
-const containerElement = document.querySelector(".subjects-container");
 
-// Status tracking using JavaScript objects (no localStorage)
-let examStatus = {};
-let prepStatus = {};
+        const subjects = ["Advance Web Technology", "Computer Networks", "Machine Learning", "Understanding India", "Cryptography"];
+        const containerElement = document.querySelector(".subjects-container");
 
-// Initialize status for all subjects
-subjects.forEach((subject) => {
-  examStatus[subject] = false;
-  prepStatus[subject] = false;
-});
+        // Status tracking using JavaScript objects (no localStorage)
+        let examStatus = {};
+        let prepStatus = {};
 
-const getStatusIcon = (subject) => {
-  if (examStatus[subject] && prepStatus[subject]) return "✅";
-  if (examStatus[subject]) return "📝";
-  if (prepStatus[subject]) return "📚";
-  return "";
-};
+        // Initialize status for all subjects
+        subjects.forEach(subject => {
+            examStatus[subject] = false;
+            prepStatus[subject] = false;
+        });
 
-const getCardClass = (subject) => {
-  if (examStatus[subject] && prepStatus[subject]) return "both-finished";
-  if (examStatus[subject]) return "exam-finished";
-  if (prepStatus[subject]) return "prep-finished";
-  return "";
-};
+        const getStatusIcon = (subject) => {
+            if (examStatus[subject] && prepStatus[subject]) return "✅";
+            if (examStatus[subject]) return "📝";
+            if (prepStatus[subject]) return "📚";
+            return "";
+        };
 
-const updateCardStatus = (subject, card) => {
-  // Remove all status classes
-  card.className = "subject-card";
+        const getCardClass = (subject) => {
+            if (examStatus[subject] && prepStatus[subject]) return "both-finished";
+            if (examStatus[subject]) return "exam-finished";
+            if (prepStatus[subject]) return "prep-finished";
+            return "";
+        };
 
-  // Add appropriate status class
-  const statusClass = getCardClass(subject);
-  if (statusClass) {
-    card.classList.add(statusClass);
-  }
+        const updateCardStatus = (subject, card) => {
+            // Remove all status classes
+            card.className = "subject-card";
+            
+            // Add appropriate status class
+            const statusClass = getCardClass(subject);
+            if (statusClass) {
+                card.classList.add(statusClass);
+            }
 
-  // Update status indicator
-  const indicator = card.querySelector(".status-indicator");
-  indicator.textContent = getStatusIcon(subject);
+            // Update status indicator
+            const indicator = card.querySelector('.status-indicator');
+            indicator.textContent = getStatusIcon(subject);
 
-  // Update button states
-  const prepBtn = card.querySelector(".prep-btn");
-  const examBtn = card.querySelector(".exam-btn");
+            // Update button states
+            const prepBtn = card.querySelector('.prep-btn');
+            const examBtn = card.querySelector('.exam-btn');
+            
+            prepBtn.classList.toggle('active', prepStatus[subject]);
+            examBtn.classList.toggle('active', examStatus[subject]);
+        };
 
-  prepBtn.classList.toggle("active", prepStatus[subject]);
-  examBtn.classList.toggle("active", examStatus[subject]);
-};
-
-const makeSubjectCards = () => {
-  subjects.forEach((subject) => {
-    const subjectCard = document.createElement("div");
-    subjectCard.classList.add("subject-card");
-
-    const currentObj = subjectMap[subject];
-    if (currentObj) {
-      subjectCard.innerHTML = `
+        const makeSubjectCards = () => {
+            subjects.forEach((subject) => {
+                const subjectCard = document.createElement("div");
+                subjectCard.classList.add("subject-card");
+                
+                const currentObj = subjectMap[subject];
+                if (currentObj) {
+                    subjectCard.innerHTML = `
                         <div class="status-indicator"></div>
                         <div class="subject-name">${subject}</div> 
                         <hr>
@@ -101,46 +96,46 @@ const makeSubjectCards = () => {
                             <button class="status-btn exam-btn">📝 Exam Done</button>
                         </div>
                     `;
+                    
+                    // Add event listeners for status buttons
+                    const prepBtn = subjectCard.querySelector('.prep-btn');
+                    const examBtn = subjectCard.querySelector('.exam-btn');
+                    
+                    prepBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        prepStatus[subject] = !prepStatus[subject];
+                        updateCardStatus(subject, subjectCard);
+                    });
+                    
+                    examBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        examStatus[subject] = !examStatus[subject];
+                        updateCardStatus(subject, subjectCard);
+                    });
 
-      // Add event listeners for status buttons
-      const prepBtn = subjectCard.querySelector(".prep-btn");
-      const examBtn = subjectCard.querySelector(".exam-btn");
+                    // Initialize card status
+                    updateCardStatus(subject, subjectCard);
+                    
+                    containerElement.appendChild(subjectCard);
+                }
+            });
+        };
 
-      prepBtn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        prepStatus[subject] = !prepStatus[subject];
-        updateCardStatus(subject, subjectCard);
-      });
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
 
-      examBtn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        examStatus[subject] = !examStatus[subject];
-        updateCardStatus(subject, subjectCard);
-      });
+        // Simple theme preference (no localStorage)
+        let currentTheme = 'dark';
 
-      // Initialize card status
-      updateCardStatus(subject, subjectCard);
+        themeToggle.addEventListener('change', () => {
+            if (themeToggle.checked) {
+                document.body.classList.add('light-theme');
+                currentTheme = 'light';
+            } else {
+                document.body.classList.remove('light-theme');
+                currentTheme = 'dark';
+            }
+        });
 
-      containerElement.appendChild(subjectCard);
-    }
-  });
-};
-
-// Theme toggle functionality
-const themeToggle = document.getElementById("themeToggle");
-
-// Simple theme preference (no localStorage)
-let currentTheme = "dark";
-
-themeToggle.addEventListener("change", () => {
-  if (themeToggle.checked) {
-    document.body.classList.add("light-theme");
-    currentTheme = "light";
-  } else {
-    document.body.classList.remove("light-theme");
-    currentTheme = "dark";
-  }
-});
-
-// Initialize the page
-makeSubjectCards();
+        // Initialize the page
+        makeSubjectCards();
