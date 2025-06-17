@@ -1,23 +1,23 @@
 const subjectMap = {
     "Advance Web Technology": {
-        day: "30-April-2025",
-        time: "10:00pm - 11:30pm",
+        day: "30-June-2025",
+        time: "10:00am - 01:30pm",
     },
     "Computer Networks": {
-        day: "02-May-2025",
-        time: "10:00pm - 11:30pm",
+        day: "02-July-2025",
+        time: "10:00am - 01:00pm",
     },
     "Machine Learning": {
-        day: "06-May-2025",
-        time: "10:00pm - 11:30pm",
+        day: "04-July-2025",
+        time: "10:00am - 01:00pm",
     },
     "Understanding India": {
-        day: "09-May-2025",
-        time: "03:00pm - 04:30pm",
+        day: "07-July-2025",
+        time: "10:00am - 01:00pm",
     },
     "Cryptography": {
-        day: "13-May-2025",
-        time: "12:30pm - 02:00pm"
+        day: "19-May-2025",
+        time: "10:00am - 01:00pm"
     },
 };
 
