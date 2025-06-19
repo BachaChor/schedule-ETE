@@ -1,27 +1,28 @@
 const subjectMap = {
   "Advance Web Technology": {
-    day: "30-June-2025",
+    day: "30-May-2025",
     time: "10:00am - 01:00pm",
   },
   "Computer Networks": {
-    day: "02-July-2025",
+    day: "02-June-2025",
     time: "10:00am - 01:00pm",
   },
   "Machine Learning": {
-    day: "04-July-2025",
+    day: "04-June-2025",
     time: "10:00am - 01:00pm",
   },
   "Understanding India": {
-    day: "07-July-2025",
+    day: "07-June-2025",
     time: "10:00am - 01:00pm",
   },
   Cryptography: {
-    day: "09-July-2025",
+    day: "09-June-2025",
     time: "10:00am - 01:00pm",
   },
 };
 
-       const subjects = ["Advance Web Technology", "Computer Networks", "Machine Learning", "Understanding India", "Cryptography"];
+
+const subjects = ["Advance Web Technology", "Computer Networks", "Machine Learning", "Understanding India", "Cryptography"];
         const containerElement = document.querySelector(".subjects-container");
 
         // Status tracking with localStorage
