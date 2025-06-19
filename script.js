@@ -21,18 +21,45 @@ const subjectMap = {
   },
 };
 
-        const subjects = ["Advance Web Technology", "Computer Networks", "Machine Learning", "Understanding India", "Cryptography"];
+       const subjects = ["Advance Web Technology", "Computer Networks", "Machine Learning", "Understanding India", "Cryptography"];
         const containerElement = document.querySelector(".subjects-container");
 
-        // Status tracking using JavaScript objects (no localStorage)
+        // Status tracking with localStorage
         let examStatus = {};
         let prepStatus = {};
 
-        // Initialize status for all subjects
-        subjects.forEach(subject => {
-            examStatus[subject] = false;
-            prepStatus[subject] = false;
-        });
+        // Load status from localStorage or initialize with defaults
+        const loadStatus = () => {
+            try {
+                const savedExamStatus = localStorage.getItem('examStatus');
+                const savedPrepStatus = localStorage.getItem('prepStatus');
+                
+                examStatus = savedExamStatus ? JSON.parse(savedExamStatus) : {};
+                prepStatus = savedPrepStatus ? JSON.parse(savedPrepStatus) : {};
+                
+                // Initialize any missing subjects
+                subjects.forEach(subject => {
+                    if (examStatus[subject] === undefined) examStatus[subject] = false;
+                    if (prepStatus[subject] === undefined) prepStatus[subject] = false;
+                });
+            } catch (error) {
+                console.log('Error loading status from localStorage, using defaults');
+                subjects.forEach(subject => {
+                    examStatus[subject] = false;
+                    prepStatus[subject] = false;
+                });
+            }
+        };
+
+        // Save status to localStorage
+        const saveStatus = () => {
+            try {
+                localStorage.setItem('examStatus', JSON.stringify(examStatus));
+                localStorage.setItem('prepStatus', JSON.stringify(prepStatus));
+            } catch (error) {
+                console.log('Error saving status to localStorage');
+            }
+        };
 
         const getStatusIcon = (subject) => {
             if (examStatus[subject] && prepStatus[subject]) return "✅";
@@ -104,12 +131,14 @@ const subjectMap = {
                     prepBtn.addEventListener('click', (e) => {
                         e.stopPropagation();
                         prepStatus[subject] = !prepStatus[subject];
+                        saveStatus(); // Save to localStorage
                         updateCardStatus(subject, subjectCard);
                     });
                     
                     examBtn.addEventListener('click', (e) => {
                         e.stopPropagation();
                         examStatus[subject] = !examStatus[subject];
+                        saveStatus(); // Save to localStorage
                         updateCardStatus(subject, subjectCard);
                     });
 
@@ -121,21 +150,37 @@ const subjectMap = {
             });
         };
 
-        // Theme toggle functionality
+        // Theme toggle functionality with localStorage
         const themeToggle = document.getElementById('themeToggle');
 
-        // Simple theme preference (no localStorage)
-        let currentTheme = 'dark';
+        // Load theme preference from localStorage
+        const loadTheme = () => {
+            try {
+                const savedTheme = localStorage.getItem('theme');
+                if (savedTheme === 'light') {
+                    document.body.classList.add('light-theme');
+                    themeToggle.checked = true;
+                }
+            } catch (error) {
+                console.log('Error loading theme from localStorage');
+            }
+        };
 
         themeToggle.addEventListener('change', () => {
-            if (themeToggle.checked) {
-                document.body.classList.add('light-theme');
-                currentTheme = 'light';
-            } else {
-                document.body.classList.remove('light-theme');
-                currentTheme = 'dark';
+            try {
+                if (themeToggle.checked) {
+                    document.body.classList.add('light-theme');
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    document.body.classList.remove('light-theme');
+                    localStorage.setItem('theme', 'dark');
+                }
+            } catch (error) {
+                console.log('Error saving theme to localStorage');
             }
         });
 
         // Initialize the page
+        loadStatus(); // Load saved status first
+        loadTheme();  // Load saved theme
         makeSubjectCards();
